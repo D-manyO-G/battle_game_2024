@@ -140,7 +140,7 @@ void Bomber::Fire() {
         GenerateBullet<bullet::Explosive>(
             position_ + Rotate({0.0f, 1.2f}, turret_rotation_),
             turret_rotation_, GetDamageScale(), velocity);
-        fire_count_down_ = kTickPerSecond;  // Fire interval 1 second.
+        fire_count_down_ = kTickPerSecond * 3;  // Fire interval 1 second.
       }
     }
   }

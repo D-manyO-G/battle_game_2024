@@ -19,12 +19,22 @@ Explosive::Explosive(GameCore *core,
 }
 
 void Explosive::Render() {
-  SetTransformation(position_, rotation_, glm::vec2{0.1f});
+  SetTransformation(position_, rotation_, glm::vec2{0.5f});
   SetColor(game_core_->GetPlayerColor(player_id_));
-  SetTexture(BATTLE_GAME_ASSETS_DIR "textures/particle3.png");
-//  for (float deg = 0.0; deg < 2*pi; deg += pi/4)
-//  	Set
+  SetTexture(BATTLE_GAME_ASSETS_DIR "textures/bomber1.png");
   DrawModel(0);
+  const float pi = 3.1415926535f;
+  for (float deg = 0.0; deg < 2*pi; deg += pi/4)
+  {
+    SetTransformation(position_ + Rotate(glm::vec2{0.0f, detect_range_}, deg), 0.0f, glm::vec2{0.25f});
+    SetColor({0.0f,0.0f,1.0f,0.5f});
+    SetTexture(BATTLE_GAME_ASSETS_DIR "textures/bomber0.png");
+  DrawModel(0);
+    SetTransformation(position_ + Rotate(glm::vec2{0.0f, damage_range_}, deg + pi/8), 0.0f, glm::vec2{0.3f});
+    SetColor({1.0f,0.0f,0.0f,0.5f});
+    SetTexture(BATTLE_GAME_ASSETS_DIR "textures/bomber0.png");
+  DrawModel(0);
+  }
 }
 
 void Explosive::Bomb() {
@@ -39,6 +49,7 @@ void Explosive::Bomb() {
 
 void Explosive::Update() {
   position_ += velocity_ * kSecondPerTick;
+  if (glm::length(velocity_) >= 5.0f) velocity_ = velocity_ * 0.9f;
   bool should_die = false;
   if (game_core_->IsBlockedByObstacles(position_)) {
     should_die = true;
