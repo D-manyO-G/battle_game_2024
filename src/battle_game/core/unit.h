@@ -18,6 +18,7 @@ class Unit : public Object {
   }
   void SetPosition(glm::vec2 position);
   void SetRotation(float rotation);
+  glm::vec2 Unit::GetPosition() const;
 
   [[nodiscard]] virtual float GetDamageScale() const;
   [[nodiscard]] virtual float GetSpeedScale() const;

@@ -31,6 +31,10 @@ void Unit::SetPosition(glm::vec2 position) {
   position_ = position;
 }
 
+glm::vec2 Unit::GetPosition() const {
+  return position_;
+}
+
 void Unit::SetRotation(float rotation) {
   rotation_ = rotation;
 }
