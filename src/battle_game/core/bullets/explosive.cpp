@@ -24,14 +24,15 @@ void Explosive::Render() {
   SetTexture(BATTLE_GAME_ASSETS_DIR "textures/bomber1.png");
   DrawModel(0);
   const float pi = 3.1415926535f;
-  for (float deg = 0.0; deg < 2*pi; deg += pi/4)
+  const int points = 12;
+  for (float deg = 0.0; deg < 2*pi; deg += pi * 2 / points)
   {
-    SetTransformation(position_ + Rotate(glm::vec2{0.0f, detect_range_}, deg), 0.0f, glm::vec2{0.25f});
-    SetColor({0.0f,0.0f,1.0f,0.5f});
+    SetTransformation(position_ + Rotate(glm::vec2{0.0f, detect_range_}, deg), 0.0f, glm::vec2{0.1f});
+    SetColor({0.0f,0.0f,1.0f,0.2f});
     SetTexture(BATTLE_GAME_ASSETS_DIR "textures/bomber0.png");
   DrawModel(0);
-    SetTransformation(position_ + Rotate(glm::vec2{0.0f, damage_range_}, deg + pi/8), 0.0f, glm::vec2{0.3f});
-    SetColor({1.0f,0.0f,0.0f,0.5f});
+    SetTransformation(position_ + Rotate(glm::vec2{0.0f, damage_range_}, deg + pi / points), 0.0f, glm::vec2{0.15f});
+    SetColor({1.0f,0.0f,0.0f,0.2f});
     SetTexture(BATTLE_GAME_ASSETS_DIR "textures/bomber0.png");
   DrawModel(0);
   }
@@ -42,7 +43,7 @@ void Explosive::Bomb() {
   for (auto & unit : units) {
     auto dis = glm::distance(unit.second-> GetPosition(), position_);
     if (dis <= damage_range_) {
-      game_core_->PushEventDealDamage(unit.first, id_, damage_scale_ * 10.0f * (1.0 - pow(dis / damage_range_ , 2)));
+      game_core_->PushEventDealDamage(unit.first, id_, damage_scale_ * 30.0f * (1.0 - pow(dis / damage_range_ , 2)));
     }
   }
 }
@@ -52,6 +53,11 @@ void Explosive::Update() {
   if (glm::length(velocity_) >= 5.0f) velocity_ = velocity_ * 0.9f;
   bool should_die = false;
   if (game_core_->IsBlockedByObstacles(position_)) {
+    should_die = true;
+  }
+  auto player = game_core_->GetPlayer(player_id_);
+  auto &input_data = player->GetInputData();
+  if (input_data.key_down[GLFW_KEY_C]) {
     should_die = true;
   }
 
